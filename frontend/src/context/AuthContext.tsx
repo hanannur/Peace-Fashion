@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import api from "@/utils/api";
 import { User } from "@/types/user";
+import { useRouter } from "next/navigation"; // Added for redirection
 
 interface AuthContextType {
   user: User | null;
@@ -15,12 +16,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // This hits your backend to see if the JWT cookie is valid
-        const res = await api.get("/auth/me"); 
+        // ✅ CHANGED: Changed "/auth/me" to "/auth/profile" to match your backend route
+        const res = await api.get("/auth/profile"); 
         setUser(res.data);
       } catch (err) {
         setUser(null);
@@ -31,12 +33,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     checkAuth();
   }, []);
 
-  const login = (userData: User) => setUser(userData);
+  const login = (userData: User) => {
+    setUser(userData);
+  };
 
   const logout = async () => {
     try {
       await api.post("/auth/logout");
       setUser(null);
+      router.push("/login"); // ✅ ADDED: Redirect user after logout
     } catch (err) {
       console.error("Logout failed", err);
     }

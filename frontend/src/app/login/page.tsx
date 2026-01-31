@@ -11,8 +11,8 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       const res = await api.post("/auth/login", formData);
-      localStorage.setItem("token", res.data.token); // Store the JWT
-      alert("Welcome back.");
+      //localStorage.setItem("token", res.data.token); // Store the JWT
+      //alert("Welcome back.");
       router.push("/profile"); // Redirect to profile
     } catch (err: any) {
       alert(err.response?.data?.message || "Login failed");
