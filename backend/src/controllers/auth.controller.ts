@@ -153,7 +153,7 @@ export const login = async (req: Request, res: Response) => {
       res.cookie("token", token, {
       httpOnly: true,
       secure: false, // Set to true only in production
-      sameSite: "lax", 
+      sameSite: "none", 
       path: "/",
     });
       // 6️⃣ Send user info
