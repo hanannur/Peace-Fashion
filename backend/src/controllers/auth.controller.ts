@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import User, { IUser } from "../models/User";
 import { generateToken } from "../utils/generateToken";
 import { HydratedDocument } from "mongoose";
+import env from "../config/env";
 interface AuthRequest extends Request {
   user?: {
     id: string;
@@ -35,90 +36,6 @@ export const updatePassword = async (req: any, res: any) => {
     res.status(500).json({ message: error.message });
   }
 };
-// export const updateProfile = async (req: AuthRequest, res: Response) => {
-//   try {
-//     const userId = req.user?.id || req.user?._id;
-
-//     if (!userId) {
-//       return res.status(401).json({ message: "Not authorized" });
-//     }
-
-//     const user = await User.findById(userId);
-    
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     if (req.body.name) user.name = req.body.name;
-
-//     if (req.body.password) {
-//       const salt = await bcrypt.genSalt(10);
-//       user.password = await bcrypt.hash(req.body.password, salt);
-//     }
-
-//     if (req.file) {
-//       // req.file.filename comes from Multer middleware
-//       user.avatar = `/uploads/${req.file.filename}`; 
-//     }
-
-//     await user.save();
-    
-//     const userResponse = user.toObject();
-//     delete (userResponse as any).password;
-    
-//     return res.json(userResponse);
-//   } catch (error: any) {
-//     return res.status(500).json({ message: error.message || "Internal Server Error" });
-//   }
-// };
-
-
-
-// export const updateProfile = async (req: any, res: Response) => {
-//   try {
-//     const userId = req.user?.id || req.user?._id;
-
-//     if (!userId) {
-//       return res.status(401).json({ message: "Not authorized" });
-//     }
-
-//     // 🟢 Explicitly type as HydratedDocument to fix the .save() error
-//     const user: HydratedDocument<IUser> | null = await User.findById(userId);
-    
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     // Update name if provided
-//     if (req.body.name) user.name = req.body.name;
-
-//     // 🟢 Simply assign the password; your Model's pre-save hook hashes it
-//     if (req.body.password) {
-//       user.password = req.body.password;
-//     }
-
-//     // Update avatar if a file was uploaded via Multer
-//     if (req.file) {
-//       user.avatar = `/uploads/${req.file.filename}`; 
-//     }
-
-//     // 🟢 .save() is now recognized as a callable function
-//     await user.save();
-    
-//     // Clean up the response object
-//     const userResponse = user.toObject();
-//     delete (userResponse as any).password;
-    
-//     return res.json({
-//       message: "Profile updated successfully",
-//       user: userResponse
-//     });
-//   } catch (error: any) {
-//     return res.status(500).json({ message: error.message || "Internal Server Error" });
-//   }
-// };
-// backend/controllers/user.ts
-// backend/controllers/auth.controller.ts
 
 export const updateProfile = async (req: any, res: any) => {
   try {
@@ -166,11 +83,25 @@ export const register = async (req: Request, res: Response) => {
     const token = generateToken(user._id.toString(), user.role);
 
     // ✅ Set HTTP-only cookie
-    res.cookie("token", token, {
+//     res.cookie("token", token, {
+//   httpOnly: true,
+//   secure: true,      // MUST be true for Render (HTTPS)
+//   sameSite: "none",  // MUST be "none" for cross-domain cookies
+//   maxAge: 24 * 60 * 60 * 1000,
+// });
+// 🟢 This one line is your "bridge" between Local and Render
+const isProd = env.NODE_ENV === "production";
+
+res.cookie("token", token, {
   httpOnly: true,
-  secure: true,      // MUST be true for Render (HTTPS)
-  sameSite: "none",  // MUST be "none" for cross-domain cookies
-  maxAge: 24 * 60 * 60 * 1000,
+  
+  // 🟢 Works on Render (Secure) AND Localhost (Not Secure)
+  secure: isProd, 
+  
+  // 🟢 Works for Vercel->Render (None) AND Localhost (Lax)
+  sameSite: isProd ? "none" : "lax", 
+  
+  expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
 });
 
     // 5️⃣ Send response (no password)
