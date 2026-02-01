@@ -1,12 +1,14 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import api from "@/utils/api";
-import { User } from "@/types/user";
-import { useRouter } from "next/navigation"; // Added for redirection
+import { User, LoginCredentials } from "@/types/user";
+import { useRouter } from "next/navigation";
 
 interface AuthContextType {
   user: User | null;
-  login: (userData: User) => void;
+  // 🟢 STEP 1: Add setUser to the type definition
+  setUser: React.Dispatch<React.SetStateAction<User | null>>; 
+  login: (credentials: LoginCredentials) => Promise<void>; 
   logout: () => void;
   loading: boolean;
 }
@@ -18,37 +20,44 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // ✅ CHANGED: Changed "/auth/me" to "/auth/profile" to match your backend route
-        const res = await api.get("/auth/profile"); 
-        setUser(res.data);
-      } catch (err) {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    checkAuth();
-  }, []);
+ useEffect(() => {
+  const checkAuth = async () => {
+    try {
+      // 🟢 Optional: Only fetch if a cookie might exist
+      const res = await api.get("/auth/profile");
+      setUser(res.data);
+    } catch (err) {
+      // Silently fail if not logged in
+      setUser(null); 
+    } finally {
+      setLoading(false);
+    }
+  };
+  checkAuth();
+}, []);
 
-  const login = (userData: User) => {
-    setUser(userData);
+  const login = async (credentials: LoginCredentials) => {
+    try {
+      const res = await api.post("/auth/login", credentials);
+      setUser(res.data.user);
+    } catch (err: any) {
+      throw new Error(err.response?.data?.message || "Login failed");
+    }
   };
 
   const logout = async () => {
     try {
       await api.post("/auth/logout");
       setUser(null);
-      router.push("/login"); // ✅ ADDED: Redirect user after logout
+      router.push("/login");
     } catch (err) {
       console.error("Logout failed", err);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    // 🟢 STEP 2: Add setUser to the Provider value
+    <AuthContext.Provider value={{ user, setUser, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

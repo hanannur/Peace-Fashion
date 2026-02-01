@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import api from "@/utils/api";
-import { User, Package, Settings, LogOut } from "lucide-react";
+import { User, Package, Settings, LogOut, Link, Globe } from "lucide-react";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
@@ -95,7 +95,26 @@ export default function ProfilePage() {
           <button className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
             <Package size={16} /> Order History
           </button>
+          {/* Inside your profile side navigation area */}
+<div className="flex flex-col gap-6">
+  <button className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-black">
+    <User size={16} /> Personal Details
+  </button>
 
+  {/* Admin only: Link to Dashboard */}
+  {user?.role === "admin" && (
+    <Link href="/admin/dashboard" className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-blue-600">
+      <Settings size={16} /> Admin Dashboard
+    </Link>
+  )}
+
+  {/* 🟢 NEW: Link back to the main website */}
+  <Link href="/" className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:text-black transition-colors">
+    <Globe size={16} /> View Website
+  </Link>
+
+  {/* ... other buttons like Logout ... */}
+</div>
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-red-400 mt-4"

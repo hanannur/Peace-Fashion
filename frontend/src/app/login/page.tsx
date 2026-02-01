@@ -1,23 +1,47 @@
 "use client";
 import { useState } from "react";
-import api from "@/utils/api";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext"; // 🟢 Added import
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const { login } = useAuth(); // 🟢 Extract login function
   const router = useRouter();
 
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     // 🟢 Use formData.email and formData.password to match your state
+  //     await login({ 
+  //       email: formData.email, 
+  //       password: formData.password 
+  //     }); 
+      
+  //     // 🟢 Redirects to home page upon success
+  //     router.push("/"); 
+  //   } catch (err: any) {
+  //     // 🟢 Uses the error message thrown by your AuthContext
+  //     alert(err.message || "Login failed"); 
+  //   }
+  // };
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await api.post("/auth/login", formData);
-      //localStorage.setItem("token", res.data.token); // Store the JWT
-      //alert("Welcome back.");
-      router.push("/profile"); // Redirect to profile
-    } catch (err: any) {
-      alert(err.response?.data?.message || "Login failed");
-    }
-  };
+  e.preventDefault();
+  try {
+    await login({ 
+      email: formData.email, 
+      password: formData.password 
+    }); 
+    
+    // 🟢 Option A: Redirect to a static path like Home or Dashboard
+    router.push("/"); 
+
+    // 🟢 Option B: If you want to go straight to their profile, 
+    // DO NOT use the 'user' state here. Use the response from the login if possible,
+    // or wait for the refresh.
+  } catch (err: any) {
+    alert(err.message || "Login failed"); 
+  }
+};
 
   return (
     <div className="flex min-h-[80vh] items-center justify-center px-6">
