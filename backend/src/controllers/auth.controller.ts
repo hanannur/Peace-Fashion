@@ -167,11 +167,11 @@ export const register = async (req: Request, res: Response) => {
 
     // ✅ Set HTTP-only cookie
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: false, // true in production with HTTPS
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+  httpOnly: true,
+  secure: true,      // MUST be true for Render (HTTPS)
+  sameSite: "none",  // MUST be "none" for cross-domain cookies
+  maxAge: 24 * 60 * 60 * 1000,
+});
 
     // 5️⃣ Send response (no password)
     res.status(201).json({

@@ -1,6 +1,6 @@
 // import axios from "axios";
 
-// const API_BASE_URL = "https://peace-fashion.onrender.com";
+// const API_BASE_URL = "https://peace-fashion-backend.onrender.com/api";
 
 // const apiFetch = axios.create({
 //   baseURL: API_BASE_URL,
@@ -16,7 +16,7 @@
 
 import axios from "axios";
 
-const API_BASE_URL = "https://peace-fashion.onrender.com/api";
+const API_BASE_URL = "https://peace-fashion-backend.onrender.com/api";
 
 const apiFetch = axios.create({
   baseURL: API_BASE_URL,

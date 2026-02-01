@@ -16,12 +16,8 @@ const app = express();
 //   credentials: true // Allow cookies (Crucial for your JWT login later)
 // }));
 app.use(cors({
-  origin: (origin, callback) => {
-    // 🟢 Allows any origin that makes a request
-    callback(null, true); 
-  },
-  credentials: true,
-  allowedHeaders: ["Content-Type", "Authorization"]
+  origin: "https://peace-fashion.onrender.com", // Your EXACT frontend URL
+  credentials: true, // MUST be true to allow cookies
 }));
 app.use(express.json());
 app.use(cookieParser());
