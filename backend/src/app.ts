@@ -11,9 +11,17 @@ import { errorHandler } from "./middleware/error.Middleware";
 const app = express();
 
 // Middlewares
+// app.use(cors({
+  
+//   credentials: true // Allow cookies (Crucial for your JWT login later)
+// }));
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow your frontend
-  credentials: true // Allow cookies (Crucial for your JWT login later)
+  origin: (origin, callback) => {
+    // 🟢 Allows any origin that makes a request
+    callback(null, true); 
+  },
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(express.json());
 app.use(cookieParser());

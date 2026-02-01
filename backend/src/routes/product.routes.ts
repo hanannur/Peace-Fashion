@@ -24,7 +24,7 @@ router.get('/teasers', async (req, res) => {
 
 
 
-router.get("/", protect, getProducts); // everyone logged in can see
+router.get("/", getProducts); // everyone logged in can see
 router.get("/:id", protect, getProductById);
 
 router.post("/", protect, adminOnly, upload.single("image"), createProduct); // admin only
