@@ -1,18 +1,5 @@
-// import axios from "axios";
-
-// const API_BASE_URL = "https://peace-fashion-backend.onrender.com/api";
-
-// const apiFetch = axios.create({
-//   baseURL: API_BASE_URL,
-//   withCredentials: true, // 🔑 VERY IMPORTANT for JWT cookies
-//   // headers: {
-//   //   "Content-Type": "application/json",
-//   // },
-// });
 
 
-
-// export default apiFetch;
 
 import axios from "axios";
 
@@ -23,7 +10,7 @@ const apiFetch = axios.create({
   withCredentials: true, 
 });
 
-// // 🟢 Add this Interceptor
+// 🟢 Add this Interceptor
 // apiFetch.interceptors.request.use((config) => {
 //   // Check if we are in the browser and get the token
 //   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;

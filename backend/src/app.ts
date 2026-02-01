@@ -15,6 +15,7 @@ const app = express();
   
 //   credentials: true // Allow cookies (Crucial for your JWT login later)
 // }));
+app.set("trust proxy", 1);
 app.use(cors({
   origin:[ "http://localhost:3000", "https://peace-fashion-yivv.vercel.app"],// Your EXACT frontend URL
   credentials: true, // MUST be true to allow cookies
