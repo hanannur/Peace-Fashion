@@ -1,14 +1,15 @@
 "use client";
 
-const categories = [
+
+  const categories = [
   { name: "ALL", slug: "all" },
-  { name: "NEW ARRIVALS", slug: "new" },
-  { name: "ABAYAS", slug: "abayas" },
-  { name: "THOBES", slug: "thobes" },
-  { name: "KIDS", slug: "kids" },
-  { name: "HIJABS", slug: "hijabs" },
+  { name: "ABAYA", slug: "abaya" },
+  { name: "KHIMAR", slug: "khimar" },
+  { name: "NIQAB", slug: "niqab" },
+  { name: "BURQA", slug: "burqa" },
   { name: "ACCESSORIES", slug: "accessories" },
 ];
+
 
 interface CategoryNavProps {
   activeCategory: string;

@@ -43,7 +43,7 @@ export default function ProfilePage() {
 
   const handleLogout = () => {
     //localStorage.removeItem("token"); // Clear the session
-    window.location.href = "/login"; // Redirect back to login
+    window.location.href = "/"; // Redirect back to login
   };
 
   return (
