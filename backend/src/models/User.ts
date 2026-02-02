@@ -102,17 +102,22 @@ const UserSchema = new Schema<IUser>(
 );
 
 // Pre-save hook to hash password if modified
-// 🟢 Remove (next) from the function arguments
+//🟢 Remove (next) from the function arguments
+// User.ts
+// 🟢 Use async function WITHOUT the 'next' parameter
 UserSchema.pre<IUser>("save", async function () {
   // Only hash if password is modified
-  if (!this.isModified("password")) return; 
+  if (!this.isModified("password")) {
+    return; // Just return to exit the function
+  }
 
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-    // 🟢 No need to call next() here
+    // 🟢 No need for next() here
   } catch (err: any) {
-    throw err; // Mongoose will catch this as a save error
+    // 🟢 If there is an error, just throw it
+    throw err; 
   }
 });
 // 🟢 Correctly export the model with the IUser interface

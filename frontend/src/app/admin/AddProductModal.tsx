@@ -91,7 +91,7 @@ export const AddProductModal = ({
             <input
               required
               className="w-full p-3 border border-slate-200 text-sm focus:border-slate-900 outline-none"
-              placeholder="e.g. Italian Wool Suit"
+              placeholder=""
               value={formData.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
@@ -146,10 +146,10 @@ export const AddProductModal = ({
                 required
               >
                 <option value="">Select...</option>
-                <option value="Suits">Suits</option>
-                <option value="Shirts">Shirts</option>
-                <option value="Pants">Pants</option>
-                <option value="Shoes">Shoes</option>
+                <option value="Abaya">Abaya</option>
+                <option value="Khimar">Khimar</option>
+                <option value="Niqab">Niqab</option>
+                <option value="Burqas">Burqa</option>
                 <option value="Accessories">Accessories</option>
               </select>
             </div>

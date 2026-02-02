@@ -28,8 +28,8 @@ export default function LoginPage() {
   e.preventDefault();
   try {
     await login({ 
-      email: formData.email, 
-      password: formData.password 
+      email: formData.email.trim().toLowerCase(), 
+      password: formData.password .trim()
     }); 
     
     // 🟢 Option A: Redirect to a static path like Home or Dashboard

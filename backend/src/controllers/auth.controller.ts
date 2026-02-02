@@ -69,14 +69,14 @@ export const register = async (req: Request, res: Response) => {
     }
 
     // 3️⃣ Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // const salt = await bcrypt.genSalt(10);
+    // const hashedPassword = await bcrypt.hash(password, salt);
 
     // 4️⃣ Create user
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
+      password,
       role: "user",
     });
 
@@ -129,11 +129,12 @@ export const login = async (req: Request, res: Response) => {
     }
 
     // 2️⃣ Find user
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.toLowerCase() });
+    
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-
+    
     // 3️⃣ Check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -142,6 +143,7 @@ export const login = async (req: Request, res: Response) => {
 
     // 4️⃣ Generate token
     const token = generateToken(user._id.toString(), user.role);
+    const isProd = env.NODE_ENV === "production";
 
     // 5️⃣ Set HTTP-only cookie
     // res.cookie("token", token, {
@@ -152,8 +154,8 @@ export const login = async (req: Request, res: Response) => {
     // });
       res.cookie("token", token, {
       httpOnly: true,
-      secure: true, // Set to true only in production
-      sameSite: "none", 
+      secure: isProd, // Set to true only in production
+      sameSite: isProd ? "none" : "lax", 
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: "/",
     });
@@ -184,18 +186,38 @@ export const logout = (req: Request, res: Response) => {
   });
   res.status(200).json({ message: "Logged out successfully" });
 };
+// export const getProfile = async (req: any, res: any) => {
+//   try {
+//     // req.user.id comes from your protect middleware
+//     const user = await User.findById(req.user.id).select("-password"); 
+    
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     res.status(200).json(user); // This now sends name, email, role, etc.
+//   } catch (error) {
+//     res.status(500).json({ message: "Error fetching profile" });
+//   }
+// };
+
 export const getProfile = async (req: any, res: any) => {
   try {
-    // req.user.id comes from your protect middleware
+    // 🟢 Check if req.user exists (set by middleware)
+    if (!req.user || !req.user.id) {
+      return res.status(200).json(null); // Return 200 OK with null for guests
+    }
+
     const user = await User.findById(req.user.id).select("-password"); 
     
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(200).json(null); 
     }
 
-    res.status(200).json(user); // This now sends name, email, role, etc.
+    res.status(200).json(user); 
   } catch (error) {
-    res.status(500).json({ message: "Error fetching profile" });
+    // 🟢 Keep console clean even on server errors for this specific route
+    res.status(200).json(null);
   }
 };
 

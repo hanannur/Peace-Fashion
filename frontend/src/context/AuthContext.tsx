@@ -20,17 +20,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
- useEffect(() => {
+//  useEffect(() => {
+//   const checkAuth = async () => {
+//     try {
+//       // 🟢 Optional: Only fetch if a cookie might exist
+//       const res = await api.get("/auth/profile");
+//       setUser(res.data);
+//     } catch (err) {
+//       console.log("No valid session found on reload");
+//       // Silently fail if not logged in
+//       setUser(null); 
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+//   checkAuth();
+// }, []);
+
+useEffect(() => {
   const checkAuth = async () => {
     try {
-      // 🟢 Optional: Only fetch if a cookie might exist
       const res = await api.get("/auth/profile");
+      // If the backend returns null, setUser(null)
       setUser(res.data);
     } catch (err) {
-      // Silently fail if not logged in
+      // 🟢 Just set user to null silently
       setUser(null); 
     } finally {
-      setLoading(false);
+      // 🟢 This is the most important line! 
+      // It allows the page to finish loading for guests.
+      setLoading(false); 
     }
   };
   checkAuth();

@@ -7,9 +7,10 @@ const nextConfig: NextConfig = {
   },
   // In Next.js 15, eslint is handled differently, so we use 'as any' 
   // to force it to accept the ignore command.
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-} as any; 
+//   eslint: {
+//     ignoreDuringBuilds: true,
+//   },
+// } as any; 
+} as NextConfig;
 
 export default nextConfig;
