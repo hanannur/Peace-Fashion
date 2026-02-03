@@ -123,7 +123,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          //           <div className="grid grid-cols-3 gap-4 mt-20 opacity-80 max-w-2xl w-full grayscale hover:grayscale-0 transition-all duration-700">
+                     <div className="grid grid-cols-3 gap-4 mt-20 opacity-80 max-w-2xl w-full grayscale hover:grayscale-0 transition-all duration-700">
              {teasers.length > 0 ? (
                teasers.map((item, index) => (
                 <div key={item._id} className={`aspect-[3/4] overflow-hidden rounded-lg bg-slate-100 ${index === 1 ? 'translate-y-8' : ''}`}>
@@ -148,7 +148,7 @@ export default function Home() {
     <div className="min-h-screen bg-slate-50">
       {/* NEW: Member Notification Banner */}
       {events.length > 0 && (
-        <div className="bg-blue-600 text-white py-3 px-6 flex items-center justify-center gap-3">
+        <div className="bg-black text-white py-3 px-6 flex items-center justify-center gap-3">
           <Megaphone size={14} className="animate-bounce" />
           <p className="text-[10px] font-bold uppercase tracking-widest">
             {events[0].title}: <span className="font-medium opacity-90">{events[0].description}</span>

@@ -3,11 +3,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import api from "@/utils/api";
 import { X } from "lucide-react";
+import toast from "react-hot-toast"; // 1. Import toast
 
 interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void; // To refresh the table after adding
+  onSuccess: () => void;
 }
 
 export const AddProductModal = ({
@@ -19,8 +20,7 @@ export const AddProductModal = ({
     name: "",
     category: "",
     price: "",
-    image: "", 
-    
+    image: "",
     stockQuantity: "",
     isFeatured: false,
   });
@@ -29,42 +29,20 @@ export const AddProductModal = ({
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
+  
+  const payload = { ...formData, price: Number(formData.price), stockQuantity: Number(formData.stockQuantity) };
 
-    // 1. Validate manually to see exactly what is missing
-    if (
-      !formData.name ||
-      !formData.category ||
-      !formData.price ||
-      !formData.image 
-    ) {
-      alert("Please check all fields. One is empty!");
-      return;
-    }
+  // This handles Loading, Success, and Error in 5 lines of code:
+  toast.promise(api.post("/products", payload), {
+    loading: 'Adding product...',
+    success: 'Product added successfully!',
+    error: (err) => err.response?.data?.message || 'Failed to add product',
+  });
 
-    setLoading(true);
-    try {
-      const payload = {
-  name: formData.name,
-  category: formData.category,
-  price: Number(formData.price),
-  image: formData.image, // Still sending the URL string
-  stockQuantity: Number(formData.stockQuantity),
-  isFeatured: formData.isFeatured, // 🟢 Send the toggle value
+  onSuccess();
+  onClose();
 };
-
-      await api.post("/products", payload);
-
-      alert("Success!");
-      onSuccess();
-      onClose();
-    } catch (err: any) {
-      // This will tell you exactly what the backend is complaining about
-      alert(err.response?.data?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
@@ -91,7 +69,7 @@ export const AddProductModal = ({
             <input
               required
               className="w-full p-3 border border-slate-200 text-sm focus:border-slate-900 outline-none"
-              placeholder=""
+              placeholder="e.g. Silk Abaya"
               value={formData.name}
               onChange={(e) =>
                 setFormData({ ...formData, name: e.target.value })
@@ -115,7 +93,6 @@ export const AddProductModal = ({
               />
             </div>
             <div>
-              {/* NEW STOCK FIELD */}
               <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">
                 Stock Quantity
               </label>
@@ -153,7 +130,6 @@ export const AddProductModal = ({
                 <option value="Accessories">Accessories</option>
               </select>
             </div>
-           
           </div>
 
           <div>
@@ -169,25 +145,21 @@ export const AddProductModal = ({
                 setFormData({ ...formData, image: e.target.value })
               }
             />
-            <p className="text-[10px] text-slate-400 mt-1">
-              Tip: Use an image link from Unsplash for now.
-            </p>
           </div>
 
-          {/* <div>
-            <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1">
-              Description
-            </label>
-            <textarea
-              required
-              className="w-full p-3 border border-slate-200 text-sm focus:border-slate-900 outline-none h-24 resize-none"
-              placeholder="Describe the item details..."
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
+          {/* Featured Toggle */}
+          <div className="flex items-center gap-3 p-4 bg-slate-50 border border-slate-100 rounded-sm">
+            <input
+              type="checkbox"
+              id="isFeatured"
+              className="w-4 h-4 accent-black cursor-pointer"
+              checked={formData.isFeatured}
+              onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
             />
-          </div> */}
+            <label htmlFor="isFeatured" className="text-[10px] font-bold uppercase tracking-widest text-slate-600 cursor-pointer">
+              Show in Landing Page Teasers
+            </label>
+          </div>
 
           <div className="pt-4">
             <Button
@@ -200,20 +172,6 @@ export const AddProductModal = ({
           </div>
         </form>
       </div>
-      {/* 🟢 NEW: Featured Toggle for those 3 cards */}
-<div className="flex items-center gap-3 p-4 bg-slate-50 border border-slate-100 rounded-sm">
-  <input
-    type="checkbox"
-    id="isFeatured"
-    className="w-4 h-4 accent-black cursor-pointer"
-    checked={formData.isFeatured} // Make sure to add this to your useState initial state!
-    onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-  />
-  <label htmlFor="isFeatured" className="text-[10px] font-bold uppercase tracking-widest text-slate-600 cursor-pointer">
-    Show in Landing Page Teasers
-  </label>
-</div>
     </div>
   );
 };
-

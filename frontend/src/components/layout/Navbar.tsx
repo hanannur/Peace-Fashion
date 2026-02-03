@@ -22,7 +22,7 @@ export const Navbar = () => {
 
   const isActive = (path: string) => pathname === path;
 
-  // 🟢 LOGIC: Determines where the circle icon takes the user
+  
   const getProfileLink = () => {
     if (!user) return "/login";
     if (user.role === "admin") return "/admin/dashboard";
@@ -35,7 +35,7 @@ export const Navbar = () => {
 
         {/* Brand Logo */}
         <Link href="/" className="text-2xl font-bold tracking-tighter text-slate-900">
-          Hijab<span className="text-slate-400">Store.</span>
+          HIJAB<span className="text-slate-400">STORE.</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -43,16 +43,12 @@ export const Navbar = () => {
           <Link href="/" className={`${isActive('/') ? 'text-black' : 'text-slate-400 hover:text-black'} transition-colors`}>
             Home
           </Link>
-          {/* <Link href="/products" className={`${isActive('/products') ? 'text-black' : 'text-slate-400 hover:text-black'} transition-colors`}>
-            Shop All
-          </Link> */}
+          
         </div>
 
         {/* Action Icons & Auth Toggle */}
         <div className="flex items-center gap-4">
-          {/* <button className="p-2 text-slate-700 hover:bg-slate-50 rounded-full transition-colors">
-            <ShoppingBag size={20} />
-          </button> */}
+          
 
           {user ? (
             /* ✅ Logged In State */
@@ -75,12 +71,7 @@ export const Navbar = () => {
                 </div>
               </Link>
 
-              {/* <button
-                onClick={handleLogout}
-                className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors ml-2"
-              >
-                Logout
-              </button> */}
+              
             </div>
           ) : (
             /* ⚪ Guest State (Visible at localhost:3000 initially) */

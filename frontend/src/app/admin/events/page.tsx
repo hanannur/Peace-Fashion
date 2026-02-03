@@ -1,48 +1,8 @@
-// // frontend/app/admin/add-event/page.tsx
-// "use client";
-// import { useState } from "react";
-// import api from "@/utils/api";
-
-// export default function AddEventPage() {
-//   const [formData, setFormData] = useState({ title: "", description: "", type: "Giveaway" });
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-//     try {
-//       await api.post("/events", formData); // Ensure you add this route to backend server.ts
-//       alert("Event added successfully!");
-//       setFormData({ title: "", description: "", type: "Giveaway" });
-//     } catch (err) {
-//       alert("Error adding event");
-//     }
-//   };
-
-//   return (
-//     <div className="p-8">
-//       <h1 className="text-2xl font-bold mb-4">Add New Event</h1>
-//       <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
-//         <input 
-//           className="border p-2" 
-//           placeholder="Title" 
-//           onChange={(e) => setFormData({...formData, title: e.target.value})} 
-//           value={formData.title} 
-//         />
-//         <textarea 
-//           className="border p-2" 
-//           placeholder="Description" 
-//           onChange={(e) => setFormData({...formData, description: e.target.value})} 
-//           value={formData.description}
-//         />
-//         <button className="bg-black text-white p-2">Create Event</button>
-//       </form>
-//     </div>
-//   );
-// }
-
 "use client";
 import React, { useState, useEffect } from 'react';
 import api from '@/utils/api';
 import { Megaphone, Trash2, Plus, Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface Event {
   _id: string;
@@ -57,7 +17,6 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Form State
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -69,7 +28,7 @@ export default function EventsPage() {
       const { data } = await api.get('/events');
       setEvents(data);
     } catch (err) {
-      console.error("Failed to load events");
+      toast.error("Could not sync announcements", { id: 'fetch-error' });
     } finally {
       setLoading(false);
     }
@@ -80,12 +39,31 @@ export default function EventsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    const postPromise = api.post('/events', formData);
+
+    toast.promise(
+      postPromise,
+      {
+        loading: 'Publishing announcement...',
+        success: 'Announcement is now live!',
+        error: (err) => err.response?.data?.message || "Failed to post",
+      },
+      {
+        style: {
+          fontSize: '10px',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          borderRadius: '0px',
+        },
+      }
+    );
+
     try {
-      await api.post('/events', formData);
+      await postPromise;
       setFormData({ title: '', description: '', type: 'Giveaway' });
       fetchEvents();
     } catch (err) {
-      alert("Error creating announcement");
     } finally {
       setIsSubmitting(false);
     }
@@ -93,11 +71,30 @@ export default function EventsPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this announcement?")) return;
+
+    const deletePromise = api.delete(`/events/${id}`);
+
+    toast.promise(
+      deletePromise,
+      {
+        loading: 'Removing event...',
+        success: 'Announcement removed',
+        error: 'Could not delete announcement',
+      },
+      {
+        style: {
+          fontSize: '10px',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          borderRadius: '0px',
+        },
+      }
+    );
+
     try {
-      await api.delete(`/events/${id}`);
+      await deletePromise;
       fetchEvents();
     } catch (err) {
-      alert("Failed to delete");
     }
   };
 
@@ -110,7 +107,7 @@ export default function EventsPage() {
 
       {/* CREATE FORM */}
       <form onSubmit={handleSubmit} className="bg-white border border-slate-100 p-8 shadow-sm space-y-4">
-        <h2 className="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+        <h2 className="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2 text-slate-900">
           <Plus size={14} /> New Announcement
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -122,7 +119,7 @@ export default function EventsPage() {
             onChange={(e) => setFormData({...formData, title: e.target.value})}
           />
           <select 
-            className="p-3 border border-slate-100 text-sm focus:outline-none focus:border-black"
+            className="p-3 border border-slate-100 text-sm focus:outline-none focus:border-black bg-white"
             value={formData.type}
             onChange={(e) => setFormData({...formData, type: e.target.value})}
           >
@@ -151,7 +148,7 @@ export default function EventsPage() {
       <div className="space-y-4">
         <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Live Announcements</h2>
         {loading ? (
-          <p className="text-center py-10 text-slate-400 animate-pulse text-xs">Syncing with server...</p>
+          <p className="text-center py-10 text-slate-400 animate-pulse text-xs uppercase tracking-widest">Syncing with server...</p>
         ) : events.length === 0 ? (
           <div className="text-center py-20 border-2 border-dashed border-slate-100 text-slate-300 text-xs uppercase tracking-widest">
             No live announcements
@@ -159,19 +156,21 @@ export default function EventsPage() {
         ) : (
           <div className="grid gap-4">
             {events.map((event) => (
-              <div key={event._id} className="bg-white border border-slate-100 p-6 flex justify-between items-center group hover:border-blue-200 transition-all">
+              <div key={event._id} className="bg-white border border-slate-100 p-6 flex justify-between items-center group hover:border-black transition-all">
                 <div className="flex gap-4 items-start">
-                  <div className="p-3 bg-slate-50 text-slate-400 group-hover:text-blue-600 transition-colors">
+                  {/* Icon changed to black on hover */}
+                  <div className="p-3 bg-slate-50 text-slate-400 group-hover:text-black transition-colors">
                     <Megaphone size={20} />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-blue-600 bg-blue-50 px-2 py-0.5">
+                      {/* Badge changed from blue to black/slate-100 */}
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-black bg-slate-100 px-2 py-0.5">
                         {event.type}
                       </span>
-                      <h3 className="font-bold text-sm text-slate-900">{event.title}</h3>
+                      <h3 className="font-bold text-sm text-slate-900 uppercase tracking-tight">{event.title}</h3>
                     </div>
-                    <p className="text-xs text-slate-500 max-w-md">{event.description}</p>
+                    <p className="text-xs text-slate-500 max-w-md italic">{event.description}</p>
                   </div>
                 </div>
                 <button 

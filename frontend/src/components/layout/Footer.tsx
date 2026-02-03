@@ -10,7 +10,7 @@ export const Footer = () => {
         {/* Brand Column - Centered on mobile, Left on desktop */}
         <div className="flex flex-col gap-4 items-center sm:items-start text-center sm:text-left">
           <h2 className="text-2xl font-bold tracking-tighter text-slate-900">
-            GENT<span className="text-slate-400">COLLECT.</span>
+            HIJAB<span className="text-slate-400">STORE.</span>
           </h2>
           <p className="text-[10px] uppercase tracking-widest text-slate-500 leading-loose">
             The New Standard for the<br className="hidden sm:block"/>Modern Gentleman.

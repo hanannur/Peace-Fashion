@@ -1,7 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import api from "@/utils/api";
-import { User, Package, Settings, LogOut, Link, Globe } from "lucide-react";
+import { User, Package, Settings, LogOut, Link as LinkIcon, Globe } from "lucide-react"; // Renamed Link icon to avoid conflict
+import Link from "next/link"; // Import Next.js Link
+import toast from "react-hot-toast"; // 1. Import toast
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
@@ -10,16 +12,30 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await api.get("/auth/profile"); // Adjust endpoint to match your backend
+        const res = await api.get("/auth/profile");
         setUser(res.data);
       } catch (err) {
         console.error("Not logged in or error fetching profile");
+        toast.error("Failed to load profile. Please sign in again."); // 2. Error toast
       } finally {
         setLoading(false);
       }
     };
     fetchProfile();
   }, []);
+
+  const handleLogout = () => {
+    // 3. Feedback before redirect
+    toast.success("Logged out successfully");
+    
+    // Clear your auth tokens here if you aren't using cookies
+    //localStorage.removeItem("token"); 
+    
+    // Redirect
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 500); // Small delay so they see the toast
+  };
 
   if (loading)
     return (
@@ -34,17 +50,12 @@ export default function ProfilePage() {
         <p className="mb-4 uppercase text-[10px] tracking-widest text-slate-400">
           Please log in to view your profile.
         </p>
-        <a href="/login" className="text-xs font-bold underline uppercase">
+        <Link href="/login" className="text-xs font-bold underline uppercase">
           Login
-        </a>
+        </Link>
       </div>
     );
   }
-
-  const handleLogout = () => {
-    //localStorage.removeItem("token"); // Clear the session
-    window.location.href = "/"; // Redirect back to login
-  };
 
   return (
     <main className="max-w-4xl mx-auto px-6 py-20">
@@ -58,77 +69,47 @@ export default function ProfilePage() {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-        {/* Navigation Sidebar */}
-        {/* <aside className="flex flex-col gap-6">
-          <button className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-black">
-            <User size={16} /> Personal Details
-          </button>
-          <button className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-black">
-            <Package size={16} /> Order History
-          </button>
-          <button className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-black">
-            <Settings size={16} /> Settings
-          </button>
-          <button className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-red-400 hover:text-red-600 mt-4">
-            <LogOut size={16} onClick={handleLogout} /> Logout
-          </button>
-        </aside> */}
-
-        {/* Profile Content */}
-        {/* Inside your ProfilePage component, near your other navigation buttons */}
         <aside className="flex flex-col gap-6">
-          <button className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-black">
+          <button className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-black">
             <User size={16} /> Personal Details
           </button>
 
-          {/* --- ADD THIS BLOCK --- */}
+          {/* Admin only: Link to Dashboard */}
           {user?.role === "admin" && (
-            <a
-              href="/admin/dashboard"
-              className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-blue-600 hover:text-blue-800 transition-colors"
+            <Link 
+              href="/admin/dashboard" 
+              className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-black-600 hover:opacity-70 transition-opacity"
             >
               <Settings size={16} /> Admin Dashboard
-            </a>
+            </Link>
           )}
-          {/* ---------------------- */}
 
-          <button className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+          <Link 
+            href="/" 
+            className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:text-black transition-colors"
+          >
+            <Globe size={16} /> View Website
+          </Link>
+
+          <button className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-slate-400">
             <Package size={16} /> Order History
           </button>
-          {/* Inside your profile side navigation area */}
-<div className="flex flex-col gap-6">
-  <button className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-black">
-    <User size={16} /> Personal Details
-  </button>
 
-  {/* Admin only: Link to Dashboard */}
-  {user?.role === "admin" && (
-    <Link href="/admin/dashboard" className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-blue-600">
-      <Settings size={16} /> Admin Dashboard
-    </Link>
-  )}
-
-  {/* 🟢 NEW: Link back to the main website */}
-  <Link href="/" className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:text-black transition-colors">
-    <Globe size={16} /> View Website
-  </Link>
-
-  {/* ... other buttons like Logout ... */}
-</div>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest text-red-400 mt-4"
+            className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-red-400 mt-4 hover:text-red-600 transition-colors"
           >
             <LogOut size={16} /> Logout
           </button>
         </aside>
+
         <div className="md:col-span-2 space-y-8">
           <section>
             <label className="block text-[10px] font-bold uppercase text-slate-400 mb-2">
               Full Name
             </label>
             <p className="text-sm font-medium border-b border-slate-50 pb-2">
-              {user?.name || "Loading..."}
+              {user?.name || "N/A"}
             </p>
           </section>
 
@@ -137,7 +118,7 @@ export default function ProfilePage() {
               Email Address
             </label>
             <p className="text-sm font-medium border-b border-slate-50 pb-2">
-              {user?.email || "Loading..."}
+              {user?.email || "N/A"}
             </p>
           </section>
 

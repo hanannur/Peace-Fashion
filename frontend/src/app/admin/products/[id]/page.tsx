@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import api from "@/utils/api"; // Ensure your axios/api instance is here
+import api from "@/utils/api";
 import { Button } from "@/components/ui/Button";
+import toast from "react-hot-toast"; // 1. Import toast
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -16,6 +17,15 @@ export default function ProductDetailPage() {
         setProduct(res.data);
       } catch (err) {
         console.error("Failed to fetch product", err);
+        // 2. Error toast for fetching
+        toast.error("Piece not found or unavailable.", {
+          style: {
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            borderRadius: "0px",
+          },
+        });
       } finally {
         setLoading(false);
       }
@@ -23,8 +33,33 @@ export default function ProductDetailPage() {
     if (id) fetchProduct();
   }, [id]);
 
-  if (loading) return <div className="p-20 text-center uppercase tracking-widest text-[10px]">Loading Piece...</div>;
-  if (!product) return <div className="p-20 text-center">Product not found.</div>;
+  // 3. Add to Bag Function
+  const handleAddToBag = () => {
+    if (product.stockQuantity <= 0) {
+      toast.error("This item is currently out of stock.");
+      return;
+    }
+
+    // Logic for adding to cart would go here (context or state)
+    
+    toast.success(`${product.name} added to bag`, {
+      icon: '👜', // Custom icon to match the shop theme
+      style: {
+        fontSize: "10px",
+        letterSpacing: "0.1em",
+        textTransform: "uppercase",
+        borderRadius: "0px",
+      },
+    });
+  };
+
+  if (loading) return <div className="p-20 text-center uppercase tracking-[0.3em] text-[10px] animate-pulse">Loading Piece...</div>;
+  
+  if (!product) return (
+    <div className="p-20 text-center uppercase tracking-[0.3em] text-[10px] text-slate-400">
+      Product not found.
+    </div>
+  );
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-20">
@@ -34,7 +69,7 @@ export default function ProductDetailPage() {
           <img 
             src={product.image} 
             alt={product.name} 
-            className="w-full h-full object-cover" 
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" 
           />
         </div>
 
@@ -53,11 +88,22 @@ export default function ProductDetailPage() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <Button className="w-full bg-black text-white py-6 uppercase tracking-widest text-[10px] font-bold">
-              Add to Bag
+            <Button 
+              onClick={handleAddToBag} // 4. Attach handle
+              disabled={product.stockQuantity <= 0}
+              className={`w-full py-6 uppercase tracking-widest text-[10px] font-bold transition-all ${
+                product.stockQuantity > 0 
+                  ? "bg-black text-white hover:bg-slate-800" 
+                  : "bg-slate-200 text-slate-400 cursor-not-allowed"
+              }`}
+            >
+              {product.stockQuantity > 0 ? "Add to Bag" : "Out of Stock"}
             </Button>
+            
             <p className="text-[10px] text-center text-slate-400 uppercase tracking-widest">
-              {product.stockQuantity > 0 ? `${product.stockQuantity} Units available` : "Out of Stock"}
+              {product.stockQuantity > 0 
+                ? `${product.stockQuantity} Units available` 
+                : "Awaiting Restock"}
             </p>
           </div>
         </div>

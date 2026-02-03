@@ -1,13 +1,33 @@
 "use client";
-import { useState } from "react"; // Add useState
-import { useProducts } from "../../hooks/useProduct"; // Keep your fixed import
+import { useState } from "react";
+import { useProducts } from "../../hooks/useProduct"; 
 import { Button } from "@/components/ui/Button";
 import { Plus, Edit, Trash2 } from "lucide-react";
-import { AddProductModal } from "./AddProductModal"; // Updated the import path
+import { AddProductModal } from "./AddProductModal";
+import api from "@/utils/api"; // Ensure api is imported
+import toast from "react-hot-toast"; // 1. Import toast
 
 export default function AdminDashboard() {
-  const { products, loading, refresh } = useProducts(); // Destructure 'refresh' too!
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal
+  const { products, loading, refresh } = useProducts();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 2. Handle Delete with Toast
+  const handleDelete = async (id: string, name: string) => {
+    // Optional: Standard browser confirmation
+    if (!window.confirm(`Are you sure you want to delete "${name}"?`)) return;
+
+    // Use toast.promise to handle the API call states
+    toast.promise(api.delete(`/products/${id}`), {
+      loading: `Deleting ${name}...`,
+      success: () => {
+        refresh(); // Reload data
+        return <b>{name} deleted!</b>;
+      },
+      error: (err) => {
+        return err.response?.data?.message || "Could not delete product.";
+      },
+    });
+  };
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
@@ -17,7 +37,6 @@ export default function AdminDashboard() {
           <p className="text-slate-500 text-xs mt-1 uppercase tracking-widest">Product Management Control</p>
         </div>
         
-        {/* Update this button to open the modal */}
         <Button 
           onClick={() => setIsModalOpen(true)}
           className="bg-slate-900 text-white px-6 py-3 rounded-none flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:bg-black transition-all"
@@ -47,7 +66,6 @@ export default function AdminDashboard() {
                   <td className="p-5">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-16 bg-slate-100 flex-shrink-0 overflow-hidden">
-                        {/* Ensure image displays correctly */}
                         <img src={product.image} alt="" className="w-full h-full object-cover" />
                       </div>
                       <span className="font-semibold text-slate-800 text-sm">{product.name}</span>
@@ -57,8 +75,15 @@ export default function AdminDashboard() {
                   <td className="p-5 text-sm font-medium text-slate-900">${product.price}</td>
                   <td className="p-5 text-right">
                     <div className="flex justify-end gap-2">
-                      <button className="p-2 text-slate-400 hover:text-slate-900 transition-colors"><Edit size={18} /></button>
-                      <button className="p-2 text-slate-400 hover:text-red-600 transition-colors"><Trash2 size={18} /></button>
+                      <button className="p-2 text-slate-400 hover:text-slate-900 transition-colors">
+                        <Edit size={18} />
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(product._id, product.name)} // 3. Link delete button
+                        className="p-2 text-slate-400 hover:text-red-600 transition-colors"
+                      >
+                        <Trash2 size={18} />
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -68,15 +93,14 @@ export default function AdminDashboard() {
         </table>
       </div>
 
-      {/* Render the Modal */}
       <AddProductModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         onSuccess={() => {
-          refresh(); // Reload the table data automatically
+          refresh(); 
+          // Note: AddProductModal already triggers its own success toast
         }}
       />
     </div>
   );
 }
-
