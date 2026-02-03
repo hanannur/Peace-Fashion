@@ -51,8 +51,7 @@ export const protect = async (req: any, res: Response, next: NextFunction) => {
   let token = req.cookies.token;
 
   if (!token) {
-    // 🟢 Instead of 401, we just move to the next function.
-    // The controller will then decide what to do.
+    
     return next(); 
   }
 
