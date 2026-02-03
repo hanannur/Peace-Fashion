@@ -8,16 +8,7 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const router = useRouter();
 const { setUser } = useAuth();
-  // const handleRegister = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   try {
-  //     await api.post("/auth/register", formData);
-  //     alert("Account created successfully.");
-  //     router.push("/");
-  //   } catch (err: any) {
-  //     alert(err.response?.data?.message || "Registration failed");
-  //   }
-  // };
+ 
   const handleRegister = async (e: React.FormEvent) => {
   e.preventDefault();
   try {
