@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { User as UserIcon, ShoppingBag, Menu, X, LayoutDashboard } from "lucide-react";
-
+import { ModeToggle } from '@/components/ModeToggle';
 export const Navbar = () => {
   const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -50,6 +50,7 @@ export const Navbar = () => {
         <div className="flex items-center gap-4">
           
 
+
           {user ? (
             /* ✅ Logged In State */
             <div className="flex items-center gap-3">
@@ -69,10 +70,12 @@ export const Navbar = () => {
                     <span className="text-[8px] text-blue-500 font-bold uppercase tracking-tighter">Staff</span>
                   )}
                 </div>
+
               </Link>
 
               
             </div>
+            
           ) : (
             /* ⚪ Guest State (Visible at localhost:3000 initially) */
             <Link
