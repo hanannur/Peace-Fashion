@@ -68,9 +68,7 @@ export const register = async (req: Request, res: Response) => {
       return res.status(409).json({ message: "User already exists" });
     }
 
-    // 3️⃣ Hash password
-    // const salt = await bcrypt.genSalt(10);
-    // const hashedPassword = await bcrypt.hash(password, salt);
+    
 
     // 4️⃣ Create user
     const user = await User.create({
@@ -82,14 +80,7 @@ export const register = async (req: Request, res: Response) => {
 
     const token = generateToken(user._id.toString(), user.role);
 
-    // ✅ Set HTTP-only cookie
-//     res.cookie("token", token, {
-//   httpOnly: true,
-//   secure: true,      // MUST be true for Render (HTTPS)
-//   sameSite: "none",  // MUST be "none" for cross-domain cookies
-//   maxAge: 24 * 60 * 60 * 1000,
-// });
-// 🟢 This one line is your "bridge" between Local and Render
+   
 const isProd = env.NODE_ENV === "production";
 
 res.cookie("token", token, {

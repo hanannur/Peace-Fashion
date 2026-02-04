@@ -116,7 +116,6 @@ export const getProducts = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 // GET ONE
 export const getProductById = async (req: Request, res: Response) => {
   try {

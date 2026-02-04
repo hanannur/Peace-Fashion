@@ -1,10 +1,9 @@
-
 "use client";
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { Footer } from '@/components/layout/Footer';
-import { ArrowRight, Lock, ShoppingBag, Megaphone } from 'lucide-react';
+import { ArrowRight, Lock, ShoppingBag, Megaphone, ChevronLeft, ChevronRight } from 'lucide-react';
 import api from '@/utils/api';
 import { Product } from '@/types/product';
 
@@ -32,57 +31,66 @@ export default function Home() {
   const { user, loading: authLoading } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [teasers, setTeasers] = useState<Product[]>([]);
-  const [events, setEvents] = useState<any[]>([]); // State for announcements
+  const [events, setEvents] = useState<any[]>([]); 
   const [productsLoading, setProductsLoading] = useState(true);
+  
+  // 🟢 Pagination & Filter State
   const [activeCategory, setActiveCategory] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8; // Change this to show more/less items per page
 
   const categories = ["All", "Abaya", "Khimar", "Niqab" , "Burqa", "Accessories"];
 
-  // Fetch Announcements (Public)
+  // Fetch Events (Announcements)
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const { data } = await api.get('/events');
         setEvents(data);
-      } catch (error) {
-        console.error("Failed to fetch events:", error);
-      }
+      } catch (error) { console.error("Failed to fetch events:", error); }
     };
     fetchEvents();
   }, []);
 
-  // Fetch Teasers for Guests
+  // Fetch Teasers (Guest View)
   useEffect(() => {
     const fetchTeasers = async () => {
       try {
         const { data } = await api.get('/products/teasers');
         setTeasers(data.slice(0, 3));
-      } catch (error) {
-        console.error("Teaser fetch failed", error);
-      }
+      } catch (error) { console.error("Teaser fetch failed", error); }
     };
     if (!user && !authLoading) fetchTeasers();
   }, [user, authLoading]);
 
-  // Fetch Full Products for Members
+  // Fetch Full Products (Member View)
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setProductsLoading(true);
         const { data } = await api.get('/products');
         setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
+      } catch (error) { console.error("Error fetching products:", error); } finally {
         setProductsLoading(false);
       }
     };
     if (user) fetchProducts();
   }, [user]);
 
+  // 🟢 Filter Logic
   const filteredProducts = activeCategory === "All" 
     ? products 
     : products.filter(p => p.category === activeCategory);
+
+  // 🟢 Pagination Logic
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
+
+  // Reset page when category changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory]);
 
   if (authLoading) {
     return (
@@ -96,7 +104,7 @@ export default function Home() {
   if (!user) {
     return (
       <div className="min-h-screen flex flex-col bg-white">
-        {/* NEW: Scrolling Announcement Marquee */}
+        {/* Scrolling Announcement Marquee */}
         {events.length > 0 && (
           <div className="bg-black text-white py-2 overflow-hidden whitespace-nowrap border-b border-white/10">
             <div className="inline-block animate-pulse px-4 text-[10px] font-bold uppercase tracking-[0.3em]">
@@ -123,9 +131,10 @@ export default function Home() {
               </Link>
             </div>
           </div>
-                     <div className="grid grid-cols-3 gap-4 mt-20 opacity-80 max-w-2xl w-full grayscale hover:grayscale-0 transition-all duration-700">
-             {teasers.length > 0 ? (
-               teasers.map((item, index) => (
+          
+          <div className="grid grid-cols-3 gap-4 mt-20 opacity-80 max-w-2xl w-full grayscale hover:grayscale-0 transition-all duration-700">
+            {teasers.length > 0 ? (
+              teasers.map((item, index) => (
                 <div key={item._id} className={`aspect-[3/4] overflow-hidden rounded-lg bg-slate-100 ${index === 1 ? 'translate-y-8' : ''}`}>
                   <img src={item.image} alt="Featured" className="w-full h-full object-cover" />
                 </div>
@@ -134,19 +143,20 @@ export default function Home() {
               <>
                 <div className="aspect-[3/4] bg-slate-100 rounded-lg animate-pulse"></div>
                 <div className="aspect-[3/4] bg-slate-200 rounded-lg translate-y-8 animate-pulse"></div>
-                 <div className="aspect-[3/4] bg-slate-100 rounded-lg animate-pulse"></div>
-               </>
-            )}               </div>
+                <div className="aspect-[3/4] bg-slate-100 rounded-lg animate-pulse"></div>
+              </>
+            )}
+          </div>
         </main>
         <Footer />
       </div>
     );
   }
 
-  // VIEW 2: LOGGED IN
+  // VIEW 2: LOGGED IN (With Pagination)
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* NEW: Member Notification Banner */}
+      {/* Member Notification Banner */}
       {events.length > 0 && (
         <div className="bg-black text-white py-3 px-6 flex items-center justify-center gap-3">
           <Megaphone size={14} className="animate-bounce" />
@@ -177,18 +187,49 @@ export default function Home() {
         <div className="mb-8 flex justify-between items-end">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Welcome back, {user.name}</h2>
-            <p className="text-slate-500 text-sm mt-1">Viewing {activeCategory} Collections</p>
+            <p className="text-slate-500 text-sm mt-1">
+              Showing {filteredProducts.length > 0 ? startIndex + 1 : 0}-{Math.min(startIndex + itemsPerPage, filteredProducts.length)} of {filteredProducts.length} items
+            </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {/* Product Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
           {productsLoading ? (
             [...Array(8)].map((_, i) => <div key={i} className="bg-white rounded-2xl border border-slate-100 p-4 animate-pulse aspect-square" />)
+          ) : filteredProducts.length === 0 ? (
+            <div className="col-span-full text-center py-20 text-slate-400">No products found in this category.</div>
           ) : (
-            filteredProducts.map((product) => <ProductCard key={product._id} product={product} />)
+            paginatedProducts.map((product) => <ProductCard key={product._id} product={product} />)
           )}
         </div>
+
+        {/* 🟢 Pagination Controls */}
+        {!productsLoading && filteredProducts.length > itemsPerPage && (
+          <div className="flex justify-center items-center gap-4">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="p-3 bg-white border border-slate-200 rounded-full hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="p-3 bg-white border border-slate-200 rounded-full hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </div>
+        )}
       </main>
+      <Footer />
     </div>
   );
 }
