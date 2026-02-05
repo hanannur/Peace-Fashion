@@ -117,12 +117,12 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
         />
       )}
 
-      <aside className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-slate-100 z-50 transition-transform duration-300 ease-in-out transform ${
+      <aside className={`fixed top-0 left-0 h-full w-64 bg-card border-r border-border z-50 transition-transform duration-300 ease-in-out transform ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}>
         <div className="flex items-center justify-between p-6">
-          <h2 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400">Admin Panel</h2>
-          <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-black">
+          <h2 className="text-xs font-black uppercase tracking-[0.3em] text-muted-foreground">Admin Panel</h2>
+          <button onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground">
             <X size={20} />
           </button>
         </div>
@@ -131,7 +131,7 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
           <Link
             href="/"
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-black transition-all mb-4 border-b border-slate-50"
+            className="flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-all mb-4 border-b border-border"
           >
             <Home size={16} />
             View Website
@@ -147,7 +147,7 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
                 className={`flex items-center gap-3 px-4 py-3 text-[11px] font-bold uppercase tracking-widest transition-all ${
                   isActive 
                     ? "bg-black text-white" 
-                    : "text-slate-500 hover:bg-slate-50 hover:text-black"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
               >
                 <item.icon size={16} />
@@ -157,7 +157,7 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
           })}
         </nav>
 
-        <div className="p-4 border-t border-slate-50">
+        <div className="p-4 border-t border-border">
           <button 
             onClick={logout}
             className="flex items-center gap-3 px-4 py-3 w-full text-[11px] font-bold uppercase tracking-widest text-red-500 hover:bg-red-50 transition-all"

@@ -36,7 +36,7 @@ export const Navbar = () => {
 
         {/* Brand Logo */}
         <Link href="/" className="text-2xl font-bold tracking-tighter text-foreground transition-colors duration-300">
-          HIJAB<span className="text-slate-400">STORE.</span>
+          HIJAB<span className="text-muted-foreground">STORE.</span>
         </Link>
 
         {/* Desktop Navigation */}

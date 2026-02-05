@@ -9,7 +9,7 @@ import { Product } from '@/types/product';
 
 // Reusable Product Card
 const ProductCard = ({ product }: { product: Product }) => (
-  <div className="group bg--card rounded-2xl border border-border p-4 hover:shadow-xl hover:shadow-slate-200/20 dark:hover:shadow-black/40 transition-all">
+  <div className="group bg-card rounded-2xl border border-border p-4 hover:shadow-xl hover:shadow-slate-200/20 dark:hover:shadow-black/40 transition-all">
     <div className="relative aspect-square overflow-hidden rounded-xl bg-muted-50 mb-4">
       <img
         src={product.image}
@@ -94,7 +94,7 @@ export default function Home() {
 
   if (authLoading) {
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-white">
+      <div className="h-screen w-full flex items-center justify-center bg-background text-foreground transition-colors duration-300 animate-pulse">
         <div className="animate-pulse text-xs font-bold tracking-widest uppercase">Loading GENTCOLLECT...</div>
       </div>
     );
@@ -126,7 +126,7 @@ export default function Home() {
                Modesty is more than clothing — it’s a statement of faith and strength. Explore beautifully designed niqabs, khimars, abayas, and burqas made to honor your values without compromising style.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Link href="/login" className="flex items-center gap-2 bg-black text-white px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] hover:bg-slate-800 transition-all">
+              <Link href="/login" className="flex items-center gap-2 bg-black text-white px-8 py-4 text-xs font-bold uppercase tracking-[0.2em] hover:bg-muted transition-all">
                 Start Watching <ArrowRight size={16} />
               </Link>
             </div>
@@ -143,7 +143,7 @@ export default function Home() {
               <>
                 <div className="aspect-[3/4] bg-muted rounded-lg animate-pulse"></div>
                 <div className="aspect-[3/4] bg-accent rounded-lg translate-y-8 animate-pulse"></div>
-                <div className="aspect-[3/4] bg-mutedrounded-lg animate-pulse"></div>
+                <div className="aspect-[3/4] bg-muted rounded-lg animate-pulse"></div>
               </>
             )}
           </div>
@@ -198,7 +198,7 @@ export default function Home() {
           {productsLoading ? (
             [...Array(8)].map((_, i) => <div key={i} className="bg-card rounded-2xl border border-border p-4 animate-pulse aspect-square" />)
           ) : filteredProducts.length === 0 ? (
-            <div className="col-span-full text-center py-20 text-slate-400">No products found in this category.</div>
+            <div className="col-span-full text-center py-20 text-muted-foreground">No products found in this category.</div>
           ) : (
             paginatedProducts.map((product) => <ProductCard key={product._id} product={product} />)
           )}
@@ -210,19 +210,19 @@ export default function Home() {
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="p-3 bg-white border border-slate-200 rounded-full hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-3 bg-white border border-border rounded-full hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronLeft size={20} />
             </button>
             
-            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
               Page {currentPage} of {totalPages}
             </span>
 
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="p-3 bg-white border border-slate-200 rounded-full hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+              className="p-3 bg-white border border-border rounded-full hover:bg-muted   disabled:opacity-30 disabled:cursor-not-allowed transition-all"
             >
               <ChevronRight size={20} />
             </button>

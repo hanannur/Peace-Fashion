@@ -26,7 +26,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (!user || user.role !== 'admin') return null;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* 2. Add the Toaster component here */}
       {/* It's invisible until a toast is triggered, so it can go anywhere in the JSX */}
       <Toaster 
@@ -42,10 +42,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }}
       />
 
-      <header className="h-16 border-b border-slate-100 flex items-center px-6 sticky top-0 bg-white/80 backdrop-blur-md z-30">
+      <header className="h-16 border-b border--border flex items-center px-6 sticky top-0 bg-background/80 backdrop-blur-md z-30 transition-colors duration-300">
         <button 
           onClick={() => setIsSidebarOpen(true)}
-          className="p-2 -ml-2 hover:bg-slate-50 rounded-full transition-colors"
+          className="p-2 -ml-2 hover:bg-muted rounded-full transition-colors"
         >
           <Menu size={20} />
         </button>

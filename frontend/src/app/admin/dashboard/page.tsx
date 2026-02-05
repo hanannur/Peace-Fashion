@@ -103,7 +103,7 @@ const executeDelete = async (productId: string, productName: string) => {
 
   if (!hasMounted || loading) {
     return (
-      <div className="p-20 text-center uppercase text-[10px] tracking-[0.3em] text-slate-400 animate-pulse">
+      <div className="p-20 text-center uppercase text-[10px] tracking-[0.3em] text-muted-foreground animate-pulse">
         Syncing Dashboard...
       </div>
     );
@@ -113,8 +113,8 @@ const executeDelete = async (productId: string, productName: string) => {
     <div className="p-8 max-w-7xl mx-auto">
       <div className="flex justify-between items-center mb-10">
         <div>
-           <h1 className="text-3xl font-bold tracking-tighter uppercase text-slate-900">Inventory</h1>
-           <p className="text-[10px] uppercase tracking-widest text-slate-400 mt-1">Stock & Catalog Overview</p>
+           <h1 className="text-3xl font-bold tracking-tighter uppercase text-foreground">Inventory</h1>
+           <p className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">Stock & Catalog Overview</p>
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
@@ -124,44 +124,44 @@ const executeDelete = async (productId: string, productName: string) => {
         </button>
       </div>
 
-      <div className="overflow-x-auto border border-slate-100 bg-white">
+      <div className="overflow-x-auto border border--border bg-card transition-colors duration-300">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-100 bg-slate-50/50">
-              <th className="p-5 text-[10px] uppercase tracking-widest text-slate-400">Product</th>
-              <th className="p-5 text-[10px] uppercase tracking-widest text-slate-400">Category</th>
-              <th className="p-5 text-[10px] uppercase tracking-widest text-slate-400">Price</th>
-              <th className="p-5 text-[10px] uppercase tracking-widest text-slate-400">Stock</th>
-              <th className="p-5 text-right text-[10px] uppercase tracking-widest text-slate-400">Actions</th>
+            <tr className="border-b border-border bg-muted/50">
+              <th className="p-5 text-[10px] uppercase tracking-widest text-muted-foreground">Product</th>
+              <th className="p-5 text-[10px] uppercase tracking-widest text-muted-foreground">Category</th>
+              <th className="p-5 text-[10px] uppercase tracking-widest text-muted-foreground">Price</th>
+              <th className="p-5 text-[10px] uppercase tracking-widest text-muted-foreground">Stock</th>
+              <th className="p-5 text-right text-[10px] uppercase tracking-widest text-muted-foreground">Actions</th>
             </tr>
           </thead>
           <tbody>
             {products.length === 0 ? (
                 <tr>
-                    <td colSpan={5} className="p-20 text-center text-[10px] uppercase tracking-widest text-slate-300">
+                    <td colSpan={5} className="p-20 text-center text-[10px] uppercase tracking-widest text-muted-foreground/70">
                         Inventory is currently empty
                     </td>
                 </tr>
             ) : (
                 products.map((product) => (
-                    <tr key={product._id} className="border-b border-slate-50 hover:bg-slate-50/30 transition-colors group">
+                    <tr key={product._id} className="border-b border-border/60 hover:bg-muted/40 transition-colors group">
                       <td className="p-5 flex items-center gap-4">
-                        <div className="w-12 h-16 bg-slate-100 overflow-hidden">
+                        <div className="w-12 h-16 bg-muted overflow-hidden">
                            <img
                             src={product.image || "https://placehold.co/400x600?text=No+Image"}
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                           />
                         </div>
-                        <span className="font-bold text-xs uppercase tracking-tight text-slate-800">{product.name}</span>
+                        <span className="font-bold text-xs uppercase tracking-tight text-foreground">{product.name}</span>
                       </td>
-                      <td className="p-5 text-[10px] uppercase tracking-widest text-slate-500">{product.category}</td>
-                      <td className="p-5 text-sm font-bold text-slate-900">${product.price}</td>
-                      <td className="p-5 text-[10px] uppercase font-bold text-slate-500">{product.stockQuantity} PCS</td>
+                      <td className="p-5 text-[10px] uppercase tracking-widest text-muted-foreground">{product.category}</td>
+                      <td className="p-5 text-sm font-bold text-muted-foreground">${product.price}</td>
+                      <td className="p-5 text-[10px] uppercase font-bold text-muted-foreground">{product.stockQuantity} PCS</td>
                       <td className="p-5 text-right">
                         <button
                           onClick={() => handleDelete(product._id, product.name)} // Pass name for the confirmation toast
-                          className="text-slate-300 hover:text-red-600 transition-colors p-2"
+                          className="text-muted-foreground/60 hover:text-red-600 transition-colors p-2"
                         >
                           <Trash2 size={18} />
                         </button>
