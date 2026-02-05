@@ -18,7 +18,7 @@ interface CategoryNavProps {
 
 export default function CategoryNav({ activeCategory, setActiveCategory }: CategoryNavProps) {
   return (
-    <nav className="w-full border-b border-slate-100 bg-white sticky top-0 z-10">
+    <nav className="w-full border-b border-s-border bg-background sticky top-0 z-10 transition-colors duration-300">
       <div className="flex justify-center space-x-8 py-4 px-6 overflow-x-auto no-scrollbar">
         {categories.map((cat) => (
           <button
@@ -26,8 +26,8 @@ export default function CategoryNav({ activeCategory, setActiveCategory }: Categ
             onClick={() => setActiveCategory(cat.slug)}
             className={`text-[10px] font-medium tracking-[0.2em] uppercase transition-colors whitespace-nowrap ${
               activeCategory === cat.slug 
-              ? "text-black border-b border-black pb-1" 
-              : "text-slate-400 hover:text-black"
+              ? "text-foreground border-b border-foreground pb-1" 
+              : "text-muted-foreground hover:text-foreground"
             }`}
           >
             {cat.name}

@@ -9,20 +9,20 @@ import { Product } from '@/types/product';
 
 // Reusable Product Card
 const ProductCard = ({ product }: { product: Product }) => (
-  <div className="group bg-white rounded-2xl border border-slate-100 p-4 hover:shadow-xl hover:shadow-slate-200/50 transition-all">
-    <div className="relative aspect-square overflow-hidden rounded-xl bg-slate-50 mb-4">
+  <div className="group bg--card rounded-2xl border border-border p-4 hover:shadow-xl hover:shadow-slate-200/20 dark:hover:shadow-black/40 transition-all">
+    <div className="relative aspect-square overflow-hidden rounded-xl bg-muted-50 mb-4">
       <img
         src={product.image}
         alt={product.name}
         className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
       />
-      <button className="absolute bottom-3 right-3 p-2 bg-white/90 backdrop-blur shadow-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-        <ShoppingBag size={18} className="text-slate-900" />
+      <button className="absolute bottom-3 right-3 p-2 bg-background/90 backdrop-blur shadow-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+        <ShoppingBag size={18} className="text-foreground" />
       </button>
     </div>
     <div className="space-y-1">
-      <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-900">{product.name}</h3>
-      <p className="text-xs text-slate-400 font-medium">${product.price}</p>
+      <h3 className="text-[11px] font-bold uppercase tracking-widest text-foreground">{product.name}</h3>
+      <p className="text-xs text-muted-foreground font-medium">${product.price}</p>
     </div>
   </div>
 );
@@ -103,7 +103,7 @@ export default function Home() {
   // VIEW 1: GUEST
   if (!user) {
     return (
-      <div className="min-h-screen flex flex-col bg-white">
+      <div className="min-h-screen flex flex-col bg-background text-foreground transition-colors duration-300">
         {/* Scrolling Announcement Marquee */}
         {events.length > 0 && (
           <div className="bg-black text-white py-2 overflow-hidden whitespace-nowrap border-b border-white/10">
@@ -115,14 +115,14 @@ export default function Home() {
 
         <main className="flex-grow flex flex-col items-center justify-center text-center px-4 py-20">
           <div className="max-w-3xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <div className="inline-flex items-center gap-2 border border-slate-200 rounded-full px-4 py-1.5 mb-6">
+            <div className="inline-flex items-center gap-2 border border-border rounded-full px-4 py-1.5 mb-6">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">New Collection Live</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">New Collection Live</span>
             </div>
-            <h1 className="text-5xl md:text-8xl font-black tracking-tighter text-slate-900 leading-[0.9]">
-              THE NEW<br /><span className="text-slate-400">STANDARD.</span>
+            <h1 className="text-5xl md:text-8xl font-black tracking-tighter text-foreground leading-[0.9]">
+              THE NEW<br /><span className="text-muted-foreground">STANDARD.</span>
             </h1>
-            <p className="text-sm md:text-base text-slate-600 max-w-lg mx-auto leading-relaxed">
+            <p className="text-sm md:text-base text-muted-foreground max-w-lg mx-auto leading-relaxed">
                Modesty is more than clothing — it’s a statement of faith and strength. Explore beautifully designed niqabs, khimars, abayas, and burqas made to honor your values without compromising style.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
@@ -135,15 +135,15 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-4 mt-20 opacity-80 max-w-2xl w-full grayscale hover:grayscale-0 transition-all duration-700">
             {teasers.length > 0 ? (
               teasers.map((item, index) => (
-                <div key={item._id} className={`aspect-[3/4] overflow-hidden rounded-lg bg-slate-100 ${index === 1 ? 'translate-y-8' : ''}`}>
+                <div key={item._id} className={`aspect-[3/4] overflow-hidden rounded-lg bg-muted ${index === 1 ? 'translate-y-8' : ''}`}>
                   <img src={item.image} alt="Featured" className="w-full h-full object-cover" />
                 </div>
               ))
             ) : (
               <>
-                <div className="aspect-[3/4] bg-slate-100 rounded-lg animate-pulse"></div>
-                <div className="aspect-[3/4] bg-slate-200 rounded-lg translate-y-8 animate-pulse"></div>
-                <div className="aspect-[3/4] bg-slate-100 rounded-lg animate-pulse"></div>
+                <div className="aspect-[3/4] bg-muted rounded-lg animate-pulse"></div>
+                <div className="aspect-[3/4] bg-accent rounded-lg translate-y-8 animate-pulse"></div>
+                <div className="aspect-[3/4] bg-mutedrounded-lg animate-pulse"></div>
               </>
             )}
           </div>
@@ -155,7 +155,7 @@ export default function Home() {
 
   // VIEW 2: LOGGED IN (With Pagination)
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Member Notification Banner */}
       {events.length > 0 && (
         <div className="bg-black text-white py-3 px-6 flex items-center justify-center gap-3">
@@ -166,15 +166,15 @@ export default function Home() {
         </div>
       )}
 
-      <section className="py-20 px-6 text-center bg-white border-b border-slate-100">
-        <h1 className="text-5xl font-light tracking-tighter uppercase mb-4">The New Standard</h1>
+      <section className="py-20 px-6 text-center bg-white border-b border-border">
+        <h1 className="text-5xl font-light tracking-tighter uppercase mb-4  text-foreground">The New Standard</h1>
         <div className="flex justify-center gap-8 mt-12 flex-wrap">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
               className={`text-[10px] uppercase tracking-[0.2em] font-bold transition-all pb-4 ${
-                activeCategory === cat ? "text-black border-b border-black" : "text-slate-400 hover:text-black"
+                activeCategory === cat ? "text-foreground border-b border-foreground" : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {cat}
@@ -187,7 +187,7 @@ export default function Home() {
         <div className="mb-8 flex justify-between items-end">
           <div>
             <h2 className="text-2xl font-bold tracking-tight">Welcome back, {user.name}</h2>
-            <p className="text-slate-500 text-sm mt-1">
+            <p className="text-muted-foreground text-sm mt-1">
               Showing {filteredProducts.length > 0 ? startIndex + 1 : 0}-{Math.min(startIndex + itemsPerPage, filteredProducts.length)} of {filteredProducts.length} items
             </p>
           </div>
@@ -196,7 +196,7 @@ export default function Home() {
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
           {productsLoading ? (
-            [...Array(8)].map((_, i) => <div key={i} className="bg-white rounded-2xl border border-slate-100 p-4 animate-pulse aspect-square" />)
+            [...Array(8)].map((_, i) => <div key={i} className="bg-card rounded-2xl border border-border p-4 animate-pulse aspect-square" />)
           ) : filteredProducts.length === 0 ? (
             <div className="col-span-full text-center py-20 text-slate-400">No products found in this category.</div>
           ) : (

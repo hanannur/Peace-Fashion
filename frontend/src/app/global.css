@@ -1,42 +1,59 @@
 @import "tailwindcss";
-/* 1. Map variables to Tailwind Theme */
+
+/* 1. Map variables to Tailwind Theme (Keep this as is) */
 @theme {
---color-background: var(--background);
---color-foreground: var(--foreground);
---color-border: var(--border);
---color-primary: var(--primary);
---color-primary-foreground: var(--primary-foreground);
---color-muted: var(--muted);
---color-muted-foreground: var(--muted-foreground);
---color-accent: var(--accent);
---color-card: var(--card);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-card: var(--card);
 }
-/* 2. Set Light Mode Values */
+
+/* 2. Set Light & Dark Mode Values */
 @layer base {
-:root {
---background: #ffffff;
---foreground: #0f172a;
---border: #e2e8f0;
---muted: #f1f5f9;
---muted-foreground: #64748b;
---primary: #0f172a;
---primary-foreground: #ffffff;
---card: #ffffff;
---accent: #f1f5f9;
+  /* LIGHT MODE (Default) */
+  :root {
+    --background: #ffffff;      /* White */
+    --foreground: #0f172a;      /* Black */
+    --border: #e2e8f0;          /* Light Gray */
+    --muted: #f1f5f9;           /* Very Light Gray */
+    --muted-foreground: #64748b;
+    --primary: #0f172a;         /* Black */
+    --primary-foreground: #ffffff; /* White */
+    --card: #ffffff;
+    --accent: #f1f5f9;
+  }
 }
-/* This tells Tailwind that 'border' utility uses our --border variable */
+
+  /* 2b. Set Dark Mode Values */
+@layer base {
+  .dark {
+    --background: #000000;
+    --foreground: #ffffff;
+    --border: #1f2937;
+    --muted: #111827;
+    --muted-foreground: #9ca3af;
+    --primary: #ffffff;
+    --primary-foreground: #000000;
+    --card: #000000;
+    --accent: #111827;
+  }
+}
+
+/* 3. Global Styles */
 @layer base {
   * {
     border-color: var(--border);
   }
-}
-}
-/* 3. Global Styles */
-@layer base {
-body {
-background-color: var(--background);
-color: var(--foreground);
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
-}
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }

@@ -30,17 +30,18 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white border-b border-slate-100 px-4 py-3 sm:px-8sticky top-0 z-50 w-full bg-white border-b border-slate-100 px-4 py-3 sm:px-8">
+    
+    <nav className="sticky top-0 z-50 w-full bg-background border-b border-border px-4 py-3 sm:px-8 transition-colors duration-300">
       <div className="max-w-7xl mx-auto flex items-center justify-between h-14">
 
         {/* Brand Logo */}
-        <Link href="/" className="text-2xl font-bold tracking-tighter text-slate-900">
+        <Link href="/" className="text-2xl font-bold tracking-tighter text-foreground transition-colors duration-300">
           HIJAB<span className="text-slate-400">STORE.</span>
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8 text-[10px] font-bold uppercase tracking-[0.2em]">
-          <Link href="/" className={`${isActive('/') ? 'text-black' : 'text-slate-400 hover:text-black'} transition-colors`}>
+          <Link href="/" className={`${isActive('/') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'} transition-colors`}>
             Home
           </Link>
           
@@ -48,22 +49,22 @@ export const Navbar = () => {
 
         {/* Action Icons & Auth Toggle */}
         <div className="flex items-center gap-4">
-          
+          <ModeToggle />
 
 
           {user ? (
             /* ✅ Logged In State */
             <div className="flex items-center gap-3">
               <Link href={getProfileLink()} className="flex items-center gap-2 group">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all ${user.role === 'admin' ? 'bg-blue-50 border-blue-200' : 'bg-slate-100 border-slate-200'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all ${user.role === 'admin' ? 'bg-blue-100/80 border-blue-300 dark:bg-blue-950 dark:border-blue-900' : 'bg-muted border-border'}`}>
                   {user.role === "admin" ? (
                     <LayoutDashboard size={16} className="text-blue-600" />
                   ) : (
-                    <UserIcon size={18} className="text-slate-600" />
+                    <UserIcon size={18} className="text--muted-foreground" />
                   )}
                 </div>
                 <div className="hidden sm:flex flex-col">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-700 leading-none">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-foreground leading-none">
                     {user.name}
                   </span>
                   {user.role === "admin" && (
@@ -80,14 +81,14 @@ export const Navbar = () => {
             /* ⚪ Guest State (Visible at localhost:3000 initially) */
             <Link
               href="/login"
-              className="px-6 py-2 border border-black text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-black hover:text-white transition-all"
+              className="px-6 py-2 border border-foreground text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-foreground hover:text-background transition-all"
             >
               Login
             </Link>
           )}
-
+         
           {/* Mobile Menu Toggle */}
-          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-slate-700">
+          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-foreground">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -95,7 +96,7 @@ export const Navbar = () => {
 
       {/* Mobile Menu Dropdown */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-100 p-6 flex flex-col gap-6 shadow-2xl animate-in fade-in slide-in-from-top-2">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-card border-b border-border p-6 flex flex-col gap-6 shadow-2xl animate-in fade-in slide-in-from-top-2 transition-colors duration-300">
           <Link href="/" onClick={() => setIsOpen(false)} className="text-xs font-bold uppercase tracking-widest">Home</Link>
           <Link href="/products" onClick={() => setIsOpen(false)} className="text-xs font-bold uppercase tracking-widest">Shop</Link>
           {user && (
