@@ -160,7 +160,7 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
         <div className="p-4 border-t border-border">
           <button 
             onClick={logout}
-            className="flex items-center gap-3 px-4 py-3 w-full text-[11px] font-bold uppercase tracking-widest text-red-500 hover:bg-red-50 transition-all"
+            className="flex items-center gap-3 px-4 py-3 w-full text-[11px] font-bold uppercase tracking-widest text-red-500 hover:bg-muted transition-all"
           >
             <LogOut size={16} />
             Exit Admin
