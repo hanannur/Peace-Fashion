@@ -92,6 +92,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Package, Users, LogOut, X, Home, Megaphone } from "lucide-react"; 
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -101,6 +102,12 @@ interface SidebarProps {
 export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
   const pathname = usePathname();
   const { logout } = useAuth();
+  const router = useRouter();
+  const handleAdminLogout = async () => {
+    await logout();
+    setIsOpen(false);
+    router.replace("/");
+  };
 
   const menuItems = [
     { name: "Inventory", href: "/admin/dashboard", icon: Package },
@@ -159,7 +166,7 @@ export default function AdminSidebar({ isOpen, setIsOpen }: SidebarProps) {
 
         <div className="p-4 border-t border-border">
           <button 
-            onClick={logout}
+            onClick={handleAdminLogout}
             className="flex items-center gap-3 px-4 py-3 w-full text-[11px] font-bold uppercase tracking-widest text-red-500 hover:bg-muted transition-all"
           >
             <LogOut size={16} />
