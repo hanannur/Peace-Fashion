@@ -166,8 +166,8 @@ export default function Home() {
         </div>
       )}
 
-      <section className="py-20 px-6 text-center bg-white border-b border-border">
-        <h1 className="text-5xl font-light tracking-tighter uppercase mb-4  text-foreground">The New Standard</h1>
+      <section className="py-10 px-6 text-center bg-background border-b border-border transition-colors duration-300">
+        <h1 className="text-4xl font-light tracking-tighter uppercase mb-4 text-foreground">The New Standard</h1>
         <div className="flex justify-center gap-8 mt-12 flex-wrap">
           {categories.map((cat) => (
             <button
