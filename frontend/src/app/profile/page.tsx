@@ -39,7 +39,7 @@ export default function ProfilePage() {
 
   if (loading)
     return (
-      <div className="p-20 text-center uppercase text-[10px] tracking-widest">
+      <div className="p-20 text-center uppercase text-[10px] tracking-widest text-muted-foreground">
         Loading Account...
       </div>
     );
@@ -47,10 +47,10 @@ export default function ProfilePage() {
   if (!user) {
     return (
       <div className="p-20 text-center">
-        <p className="mb-4 uppercase text-[10px] tracking-widest text-slate-400">
+        <p className="mb-4 uppercase text-[10px] tracking-widest text-muted-foreground">
           Please log in to view your profile.
         </p>
-        <Link href="/login" className="text-xs font-bold underline uppercase">
+        <Link href="/login" className="text-xs font-bold underline uppercase text-foreground hover:text-muted-foreground transition-colors">
           Login
         </Link>
       </div>
@@ -58,19 +58,19 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="max-w-4xl mx-auto px-6 py-20">
-      <header className="mb-12 border-b border-slate-100 pb-8">
-        <h1 className="text-3xl font-light uppercase tracking-tighter text-slate-900">
+    <main className="max-w-4xl mx-auto px-6 py-20 text-foreground">
+      <header className="mb-12 border-b border-border pb-8">
+        <h1 className="text-3xl font-light uppercase tracking-tighter text-foreground">
           Account
         </h1>
-        <p className="text-[10px] text-slate-400 uppercase tracking-[0.2em] mt-2">
+        <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] mt-2">
           Welcome back, {user.name}
         </p>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
         <aside className="flex flex-col gap-6">
-          <button className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-black">
+          <button className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-foreground">
             <User size={16} /> Personal Details
           </button>
 
@@ -78,7 +78,7 @@ export default function ProfilePage() {
           {user?.role === "admin" && (
             <Link 
               href="/admin/dashboard" 
-              className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-black-600 hover:opacity-70 transition-opacity"
+              className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-foreground/80 hover:opacity-70 transition-opacity"
             >
               <Settings size={16} /> Admin Dashboard
             </Link>
@@ -86,18 +86,18 @@ export default function ProfilePage() {
 
           <Link 
             href="/" 
-            className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:text-black transition-colors"
+            className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
           >
             <Globe size={16} /> View Website
           </Link>
 
-          <button className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-slate-400">
+          <button className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
             <Package size={16} /> Order History
           </button>
 
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-red-400 mt-4 hover:text-red-600 transition-colors"
+            className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-widest text-destructive mt-4 hover:opacity-80 transition-opacity"
           >
             <LogOut size={16} /> Logout
           </button>
@@ -105,28 +105,28 @@ export default function ProfilePage() {
 
         <div className="md:col-span-2 space-y-8">
           <section>
-            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-2">
+            <label className="block text-[10px] font-bold uppercase text-muted-foreground mb-2">
               Full Name
             </label>
-            <p className="text-sm font-medium border-b border-slate-50 pb-2">
+            <p className="text-sm font-medium border-b border-border pb-2">
               {user?.name || "N/A"}
             </p>
           </section>
 
           <section>
-            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-2">
+            <label className="block text-[10px] font-bold uppercase text-muted-foreground mb-2">
               Email Address
             </label>
-            <p className="text-sm font-medium border-b border-slate-50 pb-2">
+            <p className="text-sm font-medium border-b border-border pb-2">
               {user?.email || "N/A"}
             </p>
           </section>
 
           <section>
-            <label className="block text-[10px] font-bold uppercase text-slate-400 mb-2">
+            <label className="block text-[10px] font-bold uppercase text-muted-foreground mb-2">
               Account Type
             </label>
-            <p className="text-[10px] font-bold uppercase bg-slate-100 px-2 py-1 inline-block">
+            <p className="text-[10px] font-bold uppercase bg-muted px-2 py-1 inline-block">
               {user.role || "Customer"}
             </p>
           </section>

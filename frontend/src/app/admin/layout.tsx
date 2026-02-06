@@ -42,7 +42,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }}
       />
 
-      <header className="h-16 border-b border--border flex items-center px-6 sticky top-0 bg-background/80 backdrop-blur-md z-30 transition-colors duration-300">
+      <header className="h-16 border-b border-border flex items-center px-6 sticky top-0 bg-background/80 backdrop-blur-md z-30 transition-colors duration-300">
         <button 
           onClick={() => setIsSidebarOpen(true)}
           className="p-2 -ml-2 hover:bg-muted rounded-full transition-colors"

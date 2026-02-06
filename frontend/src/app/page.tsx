@@ -10,7 +10,7 @@ import { Product } from '@/types/product';
 // Reusable Product Card
 const ProductCard = ({ product }: { product: Product }) => (
   <div className="group bg-card rounded-2xl border border-border p-4 hover:shadow-xl hover:shadow-slate-200/20 dark:hover:shadow-black/40 transition-all">
-    <div className="relative aspect-square overflow-hidden rounded-xl bg-muted-50 mb-4">
+    <div className="relative aspect-square overflow-hidden rounded-xl bg-muted mb-4">
       <img
         src={product.image}
         alt={product.name}

@@ -50,14 +50,14 @@ export default function LoginPage() {
     <div className="flex min-h-[80vh] items-center justify-center px-6">
       <div className="w-full max-w-sm space-y-8">
         <div className="text-center">
-          <h2 className="text-2xl font-light uppercase tracking-tighter text-slate-900">Sign In</h2>
-          <p className="mt-2 text-[10px] uppercase tracking-widest text-slate-400">Enter your details below</p>
+          <h2 className="text-2xl font-light uppercase tracking-tighter text-foreground">Sign In</h2>
+          <p className="mt-2 text-[10px] uppercase tracking-widest text-muted-foreground">Enter your details below</p>
         </div>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <input
             type="email"
             placeholder="EMAIL"
-            className="w-full border-b border-slate-200 py-3 text-xs tracking-widest focus:border-black outline-none transition-colors"
+            className="w-full border-b border-border py-3 text-xs tracking-widest focus:border-black outline-none transition-colors"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
@@ -65,20 +65,20 @@ export default function LoginPage() {
           <input
             type="password"
             placeholder="PASSWORD"
-            className="w-full border-b border-slate-200 py-3 text-xs tracking-widest focus:border-black outline-none transition-colors"
+            className="w-full border-b border-border py-3 text-xs tracking-widest focus:border-black outline-none transition-colors"
             value={formData.password}
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             required
           />
           <button 
             type="submit"
-            className="w-full bg-black py-4 text-[10px] font-bold uppercase tracking-[0.3em] text-white hover:bg-slate-800 transition-colors"
+            className="w-full bg-black py-4 text-[10px] font-bold uppercase tracking-[0.3em] text-white hover:bg-muted  transition-colors"
           >
             Login
           </button>
         </form>
-        <p className="text-center text-[10px] uppercase tracking-widest text-slate-400">
-          New here? <a href="/register" className="text-black font-bold underline">Create Account</a>
+        <p className="text-center text-[10px] uppercase tracking-widest text-muted-foreground">
+          New here? <a href="/register" className="text-foreground font-bold underline">Create Account</a>
         </p>
       </div>
     </div>
