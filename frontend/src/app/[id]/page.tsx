@@ -43,7 +43,7 @@ export default function ProfilePage() {
     await logout();
     // Small delay so the user sees the logout toast
     setTimeout(() => {
-      router.push("/login");
+      router.push("/");
     }, 800);
   };
 
