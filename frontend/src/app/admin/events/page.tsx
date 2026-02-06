@@ -99,27 +99,27 @@ export default function EventsPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-8 text-foreground">
       <div>
-        <h1 className="text-3xl font-bold tracking-tighter uppercase text-slate-900">Announcements</h1>
-        <p className="text-slate-500 text-[10px] uppercase tracking-widest mt-1">Manage landing page events and alerts</p>
+        <h1 className="text-3xl font-bold tracking-tighter uppercase text-foreground">Announcements</h1>
+        <p className="text-muted-foreground text-[10px] uppercase tracking-widest mt-1">Manage landing page events and alerts</p>
       </div>
 
       {/* CREATE FORM */}
-      <form onSubmit={handleSubmit} className="bg-white border border-slate-100 p-8 shadow-sm space-y-4">
-        <h2 className="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2 text-slate-900">
+      <form onSubmit={handleSubmit} className="bg-ard border border-border p-8 shadow-sm space-y-4 transition-colors duration-300">
+        <h2 className="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2 text-foreground">
           <Plus size={14} /> New Announcement
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             required
             placeholder="Event Title (e.g. Winter Sale)"
-            className="p-3 border border-slate-100 text-sm focus:outline-none focus:border-black transition-colors"
+            className="p-3 border border-border bg-background text-foreground text-sm focus:outline-none focus:border-foreground transition-colors"
             value={formData.title}
             onChange={(e) => setFormData({...formData, title: e.target.value})}
           />
           <select 
-            className="p-3 border border-slate-100 text-sm focus:outline-none focus:border-black bg-white"
+            className="p-3 border border-border bg-background text-foreground text-sm focus:outline-none focus:border-foreground"
             value={formData.type}
             onChange={(e) => setFormData({...formData, type: e.target.value})}
           >
@@ -132,13 +132,13 @@ export default function EventsPage() {
         <textarea
           required
           placeholder="Short description for the landing page..."
-          className="w-full p-3 border border-slate-100 text-sm h-24 focus:outline-none focus:border-black"
+          className="w-full p-3 border border-border bg-background text-foreground text-sm h-24 focus:outline-none focus:border-foreground"
           value={formData.description}
           onChange={(e) => setFormData({...formData, description: e.target.value})}
         />
         <button 
           disabled={isSubmitting}
-          className="bg-black text-white px-8 py-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-slate-800 transition-all flex items-center gap-2 disabled:bg-slate-400"
+          className="bg-foreground text-background px-8 py-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:opacity-90 transition-all flex items-center gap-2 disabled:bg-muted disabled:text-muted-foreground"
         >
           {isSubmitting ? <Loader2 className="animate-spin" size={14} /> : "Post Announcement"}
         </button>
@@ -146,36 +146,36 @@ export default function EventsPage() {
 
       {/* EVENTS LIST */}
       <div className="space-y-4">
-        <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400">Live Announcements</h2>
+        <h2 className="text-xs font-bold uppercase tracking-widest text-foreground">Live Announcements</h2>
         {loading ? (
-          <p className="text-center py-10 text-slate-400 animate-pulse text-xs uppercase tracking-widest">Syncing with server...</p>
+          <p className="text-center py-10 text-muted-foreground animate-pulse text-xs uppercase tracking-widest">Syncing with server...</p>
         ) : events.length === 0 ? (
-          <div className="text-center py-20 border-2 border-dashed border-slate-100 text-slate-300 text-xs uppercase tracking-widest">
+          <div className="text-center py-20 border-2 border-dashed border-border text-muted-foreground/70 text-xs uppercase tracking-widest">
             No live announcements
           </div>
         ) : (
           <div className="grid gap-4">
             {events.map((event) => (
-              <div key={event._id} className="bg-white border border-slate-100 p-6 flex justify-between items-center group hover:border-black transition-all">
+              <div key={event._id} className="bg-card border border-border p-6 flex justify-between items-center group hover:border-foreground transition-all">
                 <div className="flex gap-4 items-start">
                   {/* Icon changed to black on hover */}
-                  <div className="p-3 bg-slate-50 text-slate-400 group-hover:text-black transition-colors">
+                  <div className="p-3 bg-muted text-muted-foreground group-hover:text-foreground transition-colors">
                     <Megaphone size={20} />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       {/* Badge changed from blue to black/slate-100 */}
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-black bg-slate-100 px-2 py-0.5">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-foreground bg-muted px-2 py-0.5">
                         {event.type}
                       </span>
-                      <h3 className="font-bold text-sm text-slate-900 uppercase tracking-tight">{event.title}</h3>
+                      <h3 className="font-bold text-sm text-foreground uppercase tracking-tight">{event.title}</h3>
                     </div>
-                    <p className="text-xs text-slate-500 max-w-md italic">{event.description}</p>
+                    <p className="text-xs text-muted-foreground max-w-md italic">{event.description}</p>
                   </div>
                 </div>
                 <button 
                   onClick={() => handleDelete(event._id)}
-                  className="p-3 text-slate-300 hover:text-red-600 hover:bg-red-50 transition-all rounded-full"
+                  className="p-3 text-muted-foreground/60 hover:text-red-600 hover:bg-red-950/3 transition-all rounded-full"
                 >
                   <Trash2 size={18} />
                 </button>
