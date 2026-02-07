@@ -33,7 +33,7 @@ export default function ProfilePage() {
 
   if (!user)
     return (
-      <div className="p-20 text-center uppercase tracking-widest text-[10px] text-slate-400">
+      <div className="p-20 text-center uppercase tracking-widest text-[10px] text-muted-500">
         Loading Profile...
       </div>
     );
@@ -111,12 +111,12 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white px-6 py-12">
+    <div className="min-h-screen bg-background text-foreground px-6 py-12 transition-colors duration-300">
       <div className="mx-auto max-w-md space-y-10">
         {/* Profile Header */}
         <div className="flex flex-col items-center text-center space-y-4">
           <div className="relative group">
-            <div className="h-24 w-24 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 overflow-hidden">
+            <div className="h-24 w-24 rounded-full bg-background flex items-center justify-center border border-slate-200 overflow-hidden">
               {user.avatar ? (
                 <img
                   src={`http://localhost:5000${user.avatar}`}
@@ -124,7 +124,7 @@ export default function ProfilePage() {
                   alt="Profile"
                 />
               ) : (
-                <User size={40} className="text-slate-400" />
+                <User size={40} className="text-foreground" />
               )}
             </div>
 
